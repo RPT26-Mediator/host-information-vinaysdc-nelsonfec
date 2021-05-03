@@ -8,6 +8,8 @@ import SuperhostIcon from './components/SuperhostIcon.jsx';
 import SuperhostBadge from './components/SuperhostBadge.jsx';
 import VerifiedIcon from './components/VerfiedIcon.jsx';
 import PaymentProtectionIcon from './components/PaymentProtectionIcon.jsx';
+import axios from 'axios';
+import faker from 'faker';
 
 
 class App extends React.Component {
@@ -53,6 +55,49 @@ class App extends React.Component {
     });
   }
 
+  addHost() {
+    let url = window.location.href;
+    let listingID = url.split('/')[3];
+
+    axios.post(`/${listingID}/add`, {
+      hostName: faker.name.findName(),
+      dateJoined: faker.date.month() + ' 2021',
+      profilePic: `https://airbnbpp.s3-us-west-1.amazonaws.com/${faker.random.number({min: 0, max: 199})}.jpg`,
+      hostDescription: faker.lorem.sentences(6),
+      reviewCount: faker.random.number(100),
+      isVerified: faker.random.boolean(),
+      isSuperhost: faker.random.boolean(),
+    })
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
+  }
+
+  deleteHost() {
+    axios.delete(`/${10}/delete`)
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
+  }
+
+  updateHost() {
+    var id = faker.random.number({
+      'min': 10,
+      'max': 50
+    });
+
+    axios.post(`/${listingID}/update`, {
+      hostName: faker.name.findName(),
+      dateJoined: faker.date.month() + ' 2021',
+      profilePic: `https://airbnbpp.s3-us-west-1.amazonaws.com/${faker.random.number({min: 0, max: 199})}.jpg`,
+      hostDescription: faker.lorem.sentences(6),
+      reviewCount: faker.random.number(100),
+      isVerified: faker.random.boolean(),
+      isSuperhost: faker.random.boolean(),
+      id: id,
+    })
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
+
+  }
 
   render() {
     return (
