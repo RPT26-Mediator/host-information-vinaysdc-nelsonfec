@@ -1,5 +1,7 @@
 const faker = require('faker');
 const fs = require('fs');
+const pool = require('./postgresDb');
+
 
 var createStream = fs.createWriteStream('DataSeedingFile.txt');
 
@@ -33,13 +35,32 @@ var writeTenMillionRecords = () => {
     }
 
   }
-  // dataArray.forEach(record => {
-  //   createStream.write(record + '\n');
-  // });
-  // createStream.end();
   createStream.end();
 };
 
 
 
-writeTenMillionRecords();
+// writeTenMillionRecords();
+
+var writeTenMillionRecordsIntoDb = async () => {
+
+  try {
+    for (var i = 0; i < 10000000; i++) {
+      const hostName = faker.name.findName();
+      const dateJoined = faker.date.month() + ' 2021';
+      const profilePic = `https://airbnbpp.s3-us-west-1.amazonaws.com/${faker.random.number({min: 0, max: 199})}.jpg`;
+      const hostDescription = faker.lorem.sentences(6);
+      const reviewCount = faker.random.number(100);
+      const isVerified = faker.random.boolean();
+      const isSuperhost = faker.random.boolean();
+      const listingID = i;
+
+      const newHost = await pool.query('INSERT INTO hostinformation (host_name, date_joined, profile_pic, host_description, review_COUNT, is_verified, is_superhost, listing_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8)', [hostName, dateJoined, profilePic, hostDescription, reviewCount, isVerified, isSuperhost, listingID]);
+      console.log('successsfully added host');
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+writeTenMillionRecordsIntoDb();
