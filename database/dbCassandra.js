@@ -25,7 +25,7 @@ var writeTenMillionRecordsIntoCassandra = async () => {
       const listingID = Number(i);
 
       var id = cassandra.types.uuid();
-      const newHost = 'INSERT INTO airbnb.hostinformation (id, host_name, date_joined, profile_pic, host_description, review_COUNT, is_verified, is_superhost, listing_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      const newHost = 'INSERT INTO airbnb.hostinformation1 (id, host_name, date_joined, profile_pic, host_description, review_COUNT, is_verified, is_superhost, listing_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
       await client.execute(newHost, [id, hostName, dateJoined, profilePic, hostDescription, reviewCount, isVerified, isSuperhost, listingID], { prepare: true }, (err, result) => {
         if (err) {
