@@ -176,4 +176,4 @@ var writetoDBFromFile = async () => {
 }
 
 // writeTenMillionRecords();
-writetoDBFromFile();
+writeTenMillionRecordsIntoDb();

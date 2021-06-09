@@ -31,3 +31,5 @@ node_modules/
 /database/DataSeedingFile.txt
 
 /database/DataSeedingFile.csv
+
+.env
