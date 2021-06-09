@@ -1,0 +1,43 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    - duration: 120
+      arrivalRate: 5
+      rampTo: 50
+      name: Ramp up load
+    - duration: 600
+      arrivalRate: 50
+      name: Sustained load
+
+scenarios:
+  - name: "AirBnB - Get multiple/6 and Post 1"
+    flow:
+      - post:
+          url: "/addHosts"
+          json:
+            {
+              "host_name": "Kalpana",
+              "date_joined": "Feb 2nd",
+              "profile_pic": "https://airbnbpp.s3-us-west-1.amazonaws.com/60.jpg",
+              "host_description": "Sed et autem id culpa dicta est dhfksdhf ",
+              "review_count": 1293,
+              "is_verified": true,
+              "is_superhost": true,
+              "listing_id": "10000000000"
+            }
+      - get:
+          url: "/hosts/1"
+      - get:
+          url: "/hosts/2"
+      - get:
+          url: "/hosts/3"
+      - get:
+          url: "/hosts/4"
+      - get:
+          url: "/hosts/5"
+      - get:
+          url: "/hosts/6"
+      - think: 5
