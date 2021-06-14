@@ -33,20 +33,18 @@ class App extends React.Component {
   getHost() {
     let url = window.location.href;
     let listingID = url.split('/')[3];
-
     $.ajax({
-      url: `/${listingID}/host`,
+      url: `http://localhost:3007/hosts/${listingID}`,
       type: 'GET',
       success: (res) => {
-        console.log(res);
         this.setState({
-          hostName: res[0].hostName,
-          dateJoined: res[0].dateJoined,
-          hostDescription: res[0].hostDescription,
-          isSuperhost: res[0].isSuperhost,
-          isVerified: res[0].isVerified,
-          profilePic: res[0].profilePic,
-          reviewCount: res[0].reviewCount
+          hostName: res[0].host_name,
+          dateJoined: res[0].date_joined,
+          hostDescription: res[0].host_description,
+          isSuperhost: res[0].is_superhost,
+          isVerified: res[0].is_verified,
+          profilePic: res[0].profile_pic,
+          reviewCount: res[0].review_count
         });
       },
       error: (err)=>{
