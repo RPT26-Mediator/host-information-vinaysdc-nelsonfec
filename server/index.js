@@ -23,19 +23,45 @@ app.get('/:listingID/host', (req, res) => {
 });
 
 
+
+const connect = async () => {
+    for (let nRetry = 1; ; nRetry++) {
+        try {
+            const client = await pool.connect();
+            if (nRetry > 1) {
+                console.info('Now successfully connected to Postgres');
+            }
+            return client;
+        } catch (e) {
+            if (e.toString().includes('ECONNREFUSED') && nRetry < 5) {
+                console.info('ECONNREFUSED connecting to Postgres, ' +
+                    'maybe container is not ready yet, will retry ' + nRetry);
+                // Wait 1 second
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            } else {
+                throw e;
+            }
+        }
+    }
+}
+
+
 //Get route
 app.get('/hosts/:id', (req, res) => {
   let request = `
-      SELECT * FROM hostinformation
-      WHERE id = ${req.params.id}
-  `;
-
-  pool.query(request, (err, data) => {
-    if (err) {
-      throw err;
-    }
-    res.status(200).json(data.rows);
-  });
+  SELECT * FROM hostinformation
+  WHERE id = ${req.params.id}
+`;
+  connect()
+    .then(() => {
+      pool.query(request, (err, data) => {
+        if (err) {
+          throw err;
+        }
+        res.status(200).json(data.rows);
+      });
+    })
+    .catch(err => console.log(err));
 });
 
 
