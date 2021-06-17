@@ -11,7 +11,7 @@ const path = require('path');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(__dirname + '/../client/dist'));
+// app.use(express.static(__dirname + '/../client/dist'));
 
 app.get('/:listingID/host', (req, res) => {
   db.getHostInfo(req.params.listingID).then((host) => {
@@ -48,20 +48,18 @@ const connect = async () => {
 
 //Get route
 app.get('/hosts/:id', (req, res) => {
+  console.log('here');
   let request = `
-  SELECT * FROM hostinformation
-  WHERE id = ${req.params.id}
-`;
-  connect()
-    .then(() => {
-      pool.query(request, (err, data) => {
-        if (err) {
-          throw err;
-        }
-        res.status(200).json(data.rows);
-      });
-    })
-    .catch(err => console.log(err));
+      SELECT * FROM hostinformation
+      WHERE id = ${req.params.id}
+  `;
+
+  pool.query(request, (err, data) => {
+    if (err) {
+      throw err;
+    }
+    res.status(200).json(data.rows);
+  });
 });
 
 
@@ -81,9 +79,9 @@ app.post('/addHosts', (req, res) => {
   });
 });
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/dist/index.html'));
-});
+// app.get('/*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../client/dist/index.html'));
+// });
 
 
 
