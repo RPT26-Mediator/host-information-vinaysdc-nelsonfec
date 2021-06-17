@@ -1,5 +1,5 @@
 config:
-  target: "http://localhost:3007"
+  target: "http://3.142.77.114"
   phases:
     - duration: 60
       arrivalRate: 5
@@ -19,7 +19,7 @@ scenarios:
           url: "/addHosts"
           json:
             {
-              "host_name": "Kalpana",
+              "host_name": "RandomUser123",
               "date_joined": "Feb 2nd",
               "profile_pic": "https://airbnbpp.s3-us-west-1.amazonaws.com/60.jpg",
               "host_description": "Sed et autem id culpa dicta est dhfksdhf ",
