@@ -79,9 +79,9 @@ app.post('/addHosts', (req, res) => {
   });
 });
 
-app.get('/loaderio-1179d0823c5df6f94db3168bcadaae0f', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../loaderio-1179d0823c5df6f94db3168bcadaae0f.txt'));
-});
+// app.get('/loaderio-1179d0823c5df6f94db3168bcadaae0f', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../loaderio-1179d0823c5df6f94db3168bcadaae0f.txt'));
+// });
 
 
 
