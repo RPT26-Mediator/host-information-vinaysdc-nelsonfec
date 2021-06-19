@@ -16,7 +16,7 @@ const client = redis.createClient(REDIS_PORT);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-// app.use(express.static(__dirname + '/../client/dist'));
+app.use(express.static(__dirname + '/../client/dist'));
 
 
 app.get('/:listingID/host', (req, res) => {
@@ -132,6 +132,10 @@ app.post('/addHosts', (req, res) => {
 // app.get('/loaderio-1179d0823c5df6f94db3168bcadaae0f', (req, res) => {
 //   res.sendFile(path.resolve(__dirname, '../loaderio-1179d0823c5df6f94db3168bcadaae0f.txt'));
 // });
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/dist/index.html'));
+});
 
 
 
