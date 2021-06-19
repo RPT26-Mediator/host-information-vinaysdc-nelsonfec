@@ -8,10 +8,16 @@ const pool = require('../database/postgresDb.js');
 const newrelic = require('newrelic');
 const path = require('path');
 
+
+const redis = require('redis');
+const REDIS_PORT = process.env.REDIS_PORT || 6379;
+const client = redis.createClient(REDIS_PORT);
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 // app.use(express.static(__dirname + '/../client/dist'));
+
 
 app.get('/:listingID/host', (req, res) => {
   db.getHostInfo(req.params.listingID).then((host) => {
@@ -45,6 +51,46 @@ const connect = async () => {
     }
 }
 
+const getNames = async(req, res) => {
+
+  try {
+
+    const id = req.params.id;
+
+    let request = `
+    SELECT * FROM hostinformation
+    WHERE id = ${id}
+  `;
+
+  pool.query(request, (err, data) => {
+    if (err) {
+      throw err;
+    }
+    client.setex(id, 3600, data.rows[0].host_name);
+
+
+    res.status(200).json(data.rows);
+  });
+
+  } catch(err) {
+    throw err;
+  }
+}
+
+function cache(req, res, next) {
+  const id = req.params.id;
+
+  client.get(id, (err, data) => {
+    if (err) throw err;
+
+    if (data !== null) {
+      res.status(200).json(data);
+    } else {
+      next();
+    }
+  })
+}
+
 
 //Get route
 app.get('/hosts/:id', (req, res) => {
@@ -61,6 +107,10 @@ app.get('/hosts/:id', (req, res) => {
     res.status(200).json(data.rows);
   });
 });
+
+//redis
+
+app.get('/redis/:id', cache, getNames);
 
 
 //Post route
